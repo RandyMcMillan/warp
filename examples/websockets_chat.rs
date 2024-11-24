@@ -183,9 +183,10 @@ static INDEX_HTML: &str = r#"<!DOCTYPE html>
         //document.write( "{\"backupwords\":\"" + backupwords + "\"},<br>" );
         var privKey = getPrivkeyHex( backupwords );
         //console.log( "privKey=" + privKey );
-        privKey = privKey.__D.toString( 'hex' );
-        console.log( "privKey=" + privKey );
-        var pubKey = nobleSecp256k1.getPublicKey( privKey, true );
+        //privKey = privKey.__D.toString( 'hex' );
+        //console.log( "privKey=" + privKey );
+        //var pubKey = nobleSecp256k1.getPublicKey( privKey, true );
+        var pubKey = nobleSecp256k1.getPublicKey( empty_sha256, true );
         console.log( "pubKey=" + pubKey.substring( 2 ) );
 
         //Be aware that not all valid bitcoin pubkeys are valid nostr pubkeys.
@@ -317,14 +318,14 @@ static INDEX_HTML: &str = r#"<!DOCTYPE html>
                                         if ( event[ 2 ].tags[ i ] && event[ 2 ].tags[ i ][ 1 ] ) {
                                                         var recipient = event[ 2 ].tags[ i ][ 1 ];
                                                         if ( recipient == pubKeyMinus2 ) {
-                                                                        document.body.innerHTML += decrypt( privKey, event[ 2 ].pubkey, event[ 2 ].content ) + " (sent privately by " + event[ 2 ].pubkey + ")<br><br>";
+                                                                        document.getElementById("nostr_functions").innerHTML += decrypt( privKey, event[ 2 ].pubkey, event[ 2 ].content ) + " (sent privately by " + event[ 2 ].pubkey + ")<br><br>";
                                                         } else if ( event[ 2 ].pubkey == pubKeyMinus2 ) {
-                                                                        document.body.innerHTML += decrypt( privKey, recipient, event[ 2 ].content ) + " (sent privately by " + event[ 2 ].pubkey + ")<br><br>";
+                                                                        document.getElementById("nostr_functions").innerHTML += decrypt( privKey, recipient, event[ 2 ].content ) + " (sent privately by " + event[ 2 ].pubkey + ")<br><br>";
                                                         }
                                         }
                         }
                 } else if ( event[ 2 ].kind == 1 ) {
-                        document.body.innerHTML += event[ 2 ].content + " (sent publicly by " + event[ 2 ].pubkey + ")<br><br>";
+                        document.getElementById("nostr_functions").innerHTML += event[ 2 ].content + " (sent publicly by " + event[ 2 ].pubkey + ")<br><br>";
                 }
         });
 </script>
