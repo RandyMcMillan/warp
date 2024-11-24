@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+mkdir -p ./bins;
+PORT=${1:-3030}
+if [ ! $(uname -s) = 'Darwin' ]; then
+	if grep -q Microsoft /proc/version; then
+		# Ubuntu on Windows using the Linux subsystem
+		alias open='explorer.exe';
+	else
+		alias open='xdg-open';
+	fi
+fi
+rm -rf bins
+mkdir -p ./bins;
+cargo build --examples;
+install target/debug/examples/websockets_chat ./bins/
+open http://localhost:$PORT
+./bins/websockets_chat
