@@ -181,7 +181,8 @@ static INDEX_HTML: &str = r#"<!DOCTYPE html>
         var bip32_root_key =
         "xprv9s21ZrQH143K2AeC12kd4aGXaLn2vujmo5G641cnG6838425jaGQFfCxZtDaUK5DXmj5AMWGiP3AxjxHrJBkDQU2wbxLvGXofrHuedAmydp"
         //document.write( "{\"backupwords\":\"" + backupwords + "\"},<br>" );
-        var privKey = getPrivkeyHex( backupwords );
+        //var privKey = getPrivkeyHex( backupwords );
+        var privKey = empty_sha256;
         //console.log( "privKey=" + privKey );
         //privKey = privKey.__D.toString( 'hex' );
         //console.log( "privKey=" + privKey );
@@ -318,14 +319,14 @@ static INDEX_HTML: &str = r#"<!DOCTYPE html>
                                         if ( event[ 2 ].tags[ i ] && event[ 2 ].tags[ i ][ 1 ] ) {
                                                         var recipient = event[ 2 ].tags[ i ][ 1 ];
                                                         if ( recipient == pubKeyMinus2 ) {
-                                                                        document.getElementById("nostr_functions").innerHTML += decrypt( privKey, event[ 2 ].pubkey, event[ 2 ].content ) + " (sent privately by " + event[ 2 ].pubkey + ")<br><br>";
+                                                                        document.getElementById("nostr_functions").innerHTML += decrypt( privKey, event[ 2 ].pubkey, event[ 2 ].content ) + " (PRIVATE:" + event[ 2 ].pubkey + ")<br>";
                                                         } else if ( event[ 2 ].pubkey == pubKeyMinus2 ) {
-                                                                        document.getElementById("nostr_functions").innerHTML += decrypt( privKey, recipient, event[ 2 ].content ) + " (sent privately by " + event[ 2 ].pubkey + ")<br><br>";
+                                                                        document.getElementById("nostr_functions").innerHTML += decrypt( privKey, recipient, event[ 2 ].content ) + " (PRIVATE:" + event[ 2 ].pubkey + ")<br><br>";
                                                         }
                                         }
                         }
                 } else if ( event[ 2 ].kind == 1 ) {
-                        document.getElementById("nostr_functions").innerHTML += event[ 2 ].content + " (sent publicly by " + event[ 2 ].pubkey + ")<br><br>";
+                        document.getElementById("nostr_functions").innerHTML += event[ 2 ].content + " (PUBLIC:" + event[ 2 ].pubkey + ")<br><br>";
                 }
         });
 </script>
