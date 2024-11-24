@@ -163,9 +163,12 @@ static INDEX_HTML: &str = r#"<!DOCTYPE html>
 </script>
 <script>
         var empty_sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-        var empty_sha256_pubKey = nobleSecp256k1.getPublicKey( empty_sha256, true );
-        console.log( "empty_sha256_pubkey=" + pubkey );
-        var raw_entropy = "00000000000000000000000000000000000000000000000000000000000000005"
+        var empty_sha256_pubkey = nobleSecp256k1.getPublicKey( empty_sha256, true );
+        console.log( "empty_sha256_pubkey=" + empty_sha256_pubkey.substring( 2 ) );
+        //                 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+        var raw_entropy = "0000000000000000000000000000000000000000000000000000000000000005"
+        var raw_entropy_pubkey = nobleSecp256k1.getPublicKey( raw_entropy, true );
+        console.log( "raw_entropy_pubkey=" + raw_entropy_pubkey.substring( 2 ) );
         var backupwords = "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon actual";
         document.write( "your backup words are " + backupwords + "<br><br>" );
         var privKey = getPrivkeyHex( backupwords );
@@ -181,8 +184,6 @@ static INDEX_HTML: &str = r#"<!DOCTYPE html>
         document.write( "your public key is " + pubKeyMinus2 + "<br><br>" );
 </script>
 
-
-    <script src="https://mempool.space/mempool.js"></script>
 
         <title>Warp Chat</title>
 
@@ -202,12 +203,12 @@ static INDEX_HTML: &str = r#"<!DOCTYPE html>
         <button type="button" id="send">Send</button><br><br>
 
         <div id="result">
-            <p><em>blocksTipHash</em><br><br></p>
+            <p><em>{"blocksTipHash":""},</em></p>
         </div>
 
         <div id="relay">
-            <p><em>{"relay":""}</em><br><br></p>
-        </div>
+            <p><em>{"relay":""}</em></p>
+        </div><br>
 
         <script type="text/javascript">
         const chat = document.getElementById('chat');
@@ -274,7 +275,7 @@ static INDEX_HTML: &str = r#"<!DOCTYPE html>
 
         const blocksTipHash = await blocks.getBlocksTipHash();
 
-        document.getElementById("result").textContent = "{\"blocksTipsHash\":" + JSON.stringify(blocksTipHash, undefined, 2) + "}";
+        document.getElementById("result").textContent = "{\"blocksTipsHash\":" + JSON.stringify(blocksTipHash, undefined, 2) + "},";
 
       };
       init();
