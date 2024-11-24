@@ -174,19 +174,31 @@ static INDEX_HTML: &str = r#"<!DOCTYPE html>
         var raw_entropy_pubkey = nobleSecp256k1.getPublicKey( raw_entropy, true );
         console.log( "raw_entropy_pubkey=" + raw_entropy_pubkey.substring( 2 ) );
         console.log( "__________expected=c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5")
-        var backupwords = "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon actual";
-        document.write( "your backup words are " + backupwords + "<br><br>" );
+        var backupwords =
+        "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon actual";
+        var bip39_seed =
+        "bdb353367810c3b17f97b89fc766b5c74322826055f36276dc6b78ad99997c088dcb59ceef9dbc05b72ef477d877487b9cf1b134e2ab70bf62164b668a05bc0c"
+        var bip32_root_key =
+        "xprv9s21ZrQH143K2AeC12kd4aGXaLn2vujmo5G641cnG6838425jaGQFfCxZtDaUK5DXmj5AMWGiP3AxjxHrJBkDQU2wbxLvGXofrHuedAmydp"
+        document.write( "{\"backupwords\":\"" + backupwords + "\"},<br>" );
         var privKey = getPrivkeyHex( backupwords );
+        //console.log( "privKey=" + privKey );
         privKey = privKey.__D.toString( 'hex' );
         console.log( "privKey=" + privKey );
-        var empty_sha256_pubKey = nobleSecp256k1.getPublicKey( empty_sha256, true );
         var pubKey = nobleSecp256k1.getPublicKey( privKey, true );
-        //be aware that not all valid bitcoin pubkeys are valid nostr pubkeys. Valid bitcoin pubkeys include uncompressed pubkeys (that start with 04), compressed pubkeys whose y coordinate is positive (that start with 02), and compressed pubkeys whose y coordinate is negative (that start with 03).
+        console.log( "pubKey=" + pubKey.substring( 2 ) );
+
+        //Be aware that not all valid bitcoin pubkeys are valid nostr pubkeys.
+        //Valid bitcoin pubkeys include uncompressed pubkeys (that start with 04),
+        //compressed pubkeys whose y coordinate is positive (that start with 02),
+        //and compressed pubkeys whose y coordinate is negative (that start with 03).
+        //
         //Only the ones that start with 02 are valid for nostr, which then allows us to chop off the 02 when storing the pubkey.
         //So if you change this code to generate random pubkeys, be sure to only use ones that have an 02 at the beginning.
         //The pubkeyMinus2 variable is the pubkey created a moment ago but without the 02 at the beginning.
+
         var pubKeyMinus2 = pubKey.substring( 2 );
-        document.write( "your public key is " + pubKeyMinus2 + "<br><br>" );
+        document.write( "{\"pubKeyMinus2\":\"" + pubKeyMinus2 + "\"}" );
 </script>
 
 
