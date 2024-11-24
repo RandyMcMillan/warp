@@ -161,68 +161,7 @@ static INDEX_HTML: &str = r#"<!DOCTYPE html>
                 }).join('');
         }
 </script>
-
-
-        <title>Warp Chat</title>
-
-
-
-    </head>
-
-
-
-
-    <body>
-        <h1>Warp chat</h1>
-        <div id="chat">
-            <p><em>Connecting...</em></p>
-        </div>
-        <input type="text" id="text" />
-        <button type="button" id="send">Send</button><br><br>
-
-        <div id="result">
-            <p><em>{"blocksTipHash":""},</em></p>
-        </div>
-
-        <div id="relay">
-            <p><em>{"relay":""}</em></p>
-        </div><br>
-
-        <script type="text/javascript">
-        const chat = document.getElementById('chat');
-        const text = document.getElementById('text');
-        //const relay = document.getElementById('relay');
-        const uri = 'ws://' + location.host + '/chat';
-        const ws = new WebSocket(uri);
-
-        function message(data) {
-            const line = document.createElement('p');
-            line.innerText = data;
-            chat.appendChild(line);
-        }
-
-        ws.onopen = function() {
-            chat.innerHTML = '<h3>Warp Connected!<h3>';
-        };
-
-        ws.onmessage = function(msg) {
-            message(msg.data);
-        };
-
-        ws.onclose = function() {
-            chat.getElementsByTagName('em')[0].innerText = 'Disconnected!';
-        };
-
-        send.onclick = function() {
-            const msg = text.value;
-            ws.send(msg);
-            makeNote(msg);
-            text.value = '';
-
-            message('<You>: ' + msg);
-        };
-
-
+<script>
         var empty_sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
         var empty_sha256_pubkey = nobleSecp256k1.getPublicKey( empty_sha256, true );
         console.log( "empty_sha256_pubkey=" + empty_sha256_pubkey.substring( 2 ) );
@@ -241,7 +180,7 @@ static INDEX_HTML: &str = r#"<!DOCTYPE html>
         "bdb353367810c3b17f97b89fc766b5c74322826055f36276dc6b78ad99997c088dcb59ceef9dbc05b72ef477d877487b9cf1b134e2ab70bf62164b668a05bc0c"
         var bip32_root_key =
         "xprv9s21ZrQH143K2AeC12kd4aGXaLn2vujmo5G641cnG6838425jaGQFfCxZtDaUK5DXmj5AMWGiP3AxjxHrJBkDQU2wbxLvGXofrHuedAmydp"
-        document.write( "{\"backupwords\":\"" + backupwords + "\"},<br>" );
+        //document.write( "{\"backupwords\":\"" + backupwords + "\"},<br>" );
         var privKey = getPrivkeyHex( backupwords );
         //console.log( "privKey=" + privKey );
         privKey = privKey.__D.toString( 'hex' );
@@ -259,9 +198,70 @@ static INDEX_HTML: &str = r#"<!DOCTYPE html>
         //The pubkeyMinus2 variable is the pubkey created a moment ago but without the 02 at the beginning.
 
         var pubKeyMinus2 = pubKey.substring( 2 );
-        document.write( "{\"pubKeyMinus2\":\"" + pubKeyMinus2 + "\"}," );
+        //document.write( "{\"pubKeyMinus2\":\"" + pubKeyMinus2 + "\"}" );
+</script>
 
 
+        <title>Warp Chat</title>
+
+
+
+    </head>
+
+
+
+
+    <body>
+        <div id="title">
+        <h1>Warp chat</h1>
+        </div>
+        <div id="result">
+            <p><em>{"blocksTipHash":""},</em></p>
+        </div>
+
+        <div id="relay">
+            <p><em>{"relay":""}</em></p>
+        </div><br>
+        <input type="text" id="text" />
+        <button type="button" id="send">Send</button><br><br>
+        <div id="chat">
+            <p><em>Connecting...</em></p>
+        </div>
+
+        <script type="text/javascript">
+        const chat = document.getElementById('chat');
+        const text = document.getElementById('text');
+        //const relay = document.getElementById('relay');
+        const uri = 'ws://' + location.host + '/chat';
+        const ws = new WebSocket(uri);
+
+        function message(data) {
+            const line = document.createElement('p');
+            line.innerText = data;
+            chat.appendChild(line);
+        }
+
+        ws.onopen = function() {
+            title.innerHTML = '<h3>Warp Connected!<h3>';
+            chat.innerHTML = '';
+        };
+
+        ws.onmessage = function(msg) {
+            message(msg.data);
+        };
+
+        ws.onclose = function() {
+            chat.getElementsByTagName('em')[0].innerText = 'Disconnected!';
+        };
+
+        send.onclick = function() {
+            const msg = text.value;
+            ws.send(msg);
+            makeNote(msg);
+            text.value = '';
+
+            message('<You>: ' + msg);
+        };
 
 
         function normalizeRelayURL(e){let[t,...r]=e.trim().split("?");return"http"===t.slice(0,4)&&(t="ws"+t.slice(4)),"ws"!==t.slice(0,2)&&(t="wss://"+t),t.length&&"/"===t[t.length-1]&&(t=t.slice(0,-1)),[t,...r].join("?")}
@@ -286,10 +286,10 @@ static INDEX_HTML: &str = r#"<!DOCTYPE html>
         socket.addEventListener( 'open', function( event ) {
 
 
-      const init = async () => {
+        const init = async () => {
 
         const { bitcoin: { blocks } } = mempoolJS({
-          hostname: 'mempool.space'
+        hostname: 'mempool.space'
         });
 
         const blocksTipHash = await blocks.getBlocksTipHash();
@@ -300,9 +300,9 @@ static INDEX_HTML: &str = r#"<!DOCTYPE html>
       init();
 
 
-        document.body.innerHTML += `try using these functions: <button onclick="subscribe( pubKeyMinus2 )">Subscribe to yourself</button> and <input type="text" id="note input" placeholder="enter a public note here" /><button onclick="makeNote( document.getElementById( 'note input' ).value )">Make public note</button><br><br>`;
-	document.body.innerHTML += `also this one: <input type="text" id="subscribable pubkey" placeholder="enter a pubkey you want to subscribe to" style="width: 100%; max-width: 300px;" /><button onclick="subscribe( document.getElementById( 'subscribable pubkey' ).value )">Subscribe to someone else</button><br><br>`;
-        document.body.innerHTML += `and this one: <input type="text" id="private note" placeholder="enter a private note here" /> <input type="text" id="recipient pubkey" placeholder="enter a pubkey to send a private message to" style="width: 100%; max-width: 300px;" /><button onclick="makePrivateNote( document.getElementById( 'private note' ).value, document.getElementById( 'recipient pubkey' ).value )">Make private note</button><br><br>`;
+        //document.body.innerHTML += `try using these functions: <button onclick="subscribe( pubKeyMinus2 )">Subscribe to yourself</button> and <input type="text" id="note input" placeholder="enter a public note here" /><button onclick="makeNote( document.getElementById( 'note input' ).value )">Make public note</button><br><br>`;
+	//document.body.innerHTML += `also this one: <input type="text" id="subscribable pubkey" placeholder="enter a pubkey you want to subscribe to" style="width: 100%; max-width: 300px;" /><button onclick="subscribe( document.getElementById( 'subscribable pubkey' ).value )">Subscribe to someone else</button><br><br>`;
+        //document.body.innerHTML += `and this one: <input type="text" id="private note" placeholder="enter a private note here" /> <input type="text" id="recipient pubkey" placeholder="enter a pubkey to send a private message to" style="width: 100%; max-width: 300px;" /><button onclick="makePrivateNote( document.getElementById( 'private note' ).value, document.getElementById( 'recipient pubkey' ).value )">Make private note</button><br><br>`;
         });
 
         // Listen for messages
