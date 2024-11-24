@@ -165,10 +165,15 @@ static INDEX_HTML: &str = r#"<!DOCTYPE html>
         var empty_sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
         var empty_sha256_pubkey = nobleSecp256k1.getPublicKey( empty_sha256, true );
         console.log( "empty_sha256_pubkey=" + empty_sha256_pubkey.substring( 2 ) );
-        //                 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-        var raw_entropy = "0000000000000000000000000000000000000000000000000000000000000005"
+        console.log( "____________expected=a34b99f22c790c4e36b2b3c2c35a36db06226e41c692fc82b8b56ac1c540c5bd")
+        var raw_entropy = "0000000000000000000000000000000000000000000000000000000000000001"
         var raw_entropy_pubkey = nobleSecp256k1.getPublicKey( raw_entropy, true );
         console.log( "raw_entropy_pubkey=" + raw_entropy_pubkey.substring( 2 ) );
+        console.log( "__________expected=79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798")
+        var raw_entropy = "0000000000000000000000000000000000000000000000000000000000000002"
+        var raw_entropy_pubkey = nobleSecp256k1.getPublicKey( raw_entropy, true );
+        console.log( "raw_entropy_pubkey=" + raw_entropy_pubkey.substring( 2 ) );
+        console.log( "__________expected=c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5")
         var backupwords = "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon actual";
         document.write( "your backup words are " + backupwords + "<br><br>" );
         var privKey = getPrivkeyHex( backupwords );
